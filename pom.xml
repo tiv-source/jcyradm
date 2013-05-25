@@ -12,4 +12,10 @@
 			<distribution>manual</distribution>
 		</license>
 	</licenses>
+	<scm>
+		<url>https://github.com/tiv-source/jcyradm</url>
+		<connection>scm:git:https://github.com/tiv-source/jcyradm.git</connection>
+		<tag>0.0.1-SNAPSHOT</tag>
+		<developerConnection>scm:git:https://github.com/tiv-source/jcyradm.git</developerConnection>
+	</scm>
 </project>
