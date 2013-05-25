@@ -5,6 +5,8 @@
 	<artifactId>jcyradm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>jcyradm</name>
+	<description>Java Lib</description>
+	<inceptionYear>2010</inceptionYear>
 	<licenses>
 		<license>
 			<name>GNU General Public License Version 3 (GPL V3)</name>
@@ -16,6 +18,20 @@
 		<name>T.I.V. Consulting GmbH</name>
 		<url>http://www.tiv-consulting.de/</url>
 	</organization>
+	<developers>
+		<developer>
+			<id>tiv-source</id>
+			<name>Marc Michele</name>
+			<email></email>
+			<organization>T.I.V. Consulting GmbH</organization>
+			<organizationUrl>http://www.tiv-consulting.de/</organizationUrl>
+			<roles>
+				<role>developer</role>
+				<role>testing</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
 	<scm>
 		<url>https://github.com/tiv-source/jcyradm/</url>
 		<connection>scm:git:https://github.com/tiv-source/jcyradm.git</connection>
@@ -42,7 +58,5 @@
 
 		</plugins>
 	</build>
-	<inceptionYear>2010</inceptionYear>
-	<description>Java Lib</description>
 
 </project>
