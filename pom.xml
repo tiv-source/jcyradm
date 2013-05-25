@@ -18,4 +18,8 @@
 		<tag>0.0.1-SNAPSHOT</tag>
 		<developerConnection>scm:git:https://github.com/tiv-source/jcyradm.git</developerConnection>
 	</scm>
+	<issueManagement>
+		<url>https://github.com/tiv-source/jcyradm/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
 </project>
