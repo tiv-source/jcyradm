@@ -22,4 +22,21 @@
 		<url>https://github.com/tiv-source/jcyradm/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<inceptionYear>2010</inceptionYear>
 </project>
