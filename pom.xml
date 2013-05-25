@@ -13,7 +13,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/tiv-source/jcyradm</url>
+		<url>https://github.com/tiv-source/jcyradm/</url>
 		<connection>scm:git:https://github.com/tiv-source/jcyradm.git</connection>
 		<tag>0.0.1-SNAPSHOT</tag>
 		<developerConnection>scm:git:https://github.com/tiv-source/jcyradm.git</developerConnection>
@@ -40,4 +40,8 @@
 	</build>
 	<inceptionYear>2010</inceptionYear>
 	<description>Java Lib</description>
+	<organization>
+		<name>T.I.V. Consulting GmbH</name>
+		<url>http://www.tiv-consulting.de/</url>
+	</organization>
 </project>
