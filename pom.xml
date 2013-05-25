@@ -39,4 +39,5 @@
 		</plugins>
 	</build>
 	<inceptionYear>2010</inceptionYear>
+	<description>Java Lib</description>
 </project>
