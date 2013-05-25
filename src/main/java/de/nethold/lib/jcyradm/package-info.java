@@ -1,5 +1,5 @@
 /**
- * In diesem Paket sind alle Hauptklassen des Projektes zusammen gefasst.
+ * In diesem Paket befinden sich alle Klassen des Projektes.
  *
  * @author Marc Michele
  *
