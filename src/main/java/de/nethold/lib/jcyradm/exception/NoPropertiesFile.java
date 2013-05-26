@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.nethold.lib.jcyradm.exception;
 
 /**
