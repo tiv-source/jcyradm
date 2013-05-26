@@ -21,4 +21,4 @@ public class AuthenticationFailure extends Exception {
         super("Wrong User or Password.");
     }
 
-} // End class
+} // Ende class

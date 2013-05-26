@@ -21,4 +21,4 @@ public class MailboxExists extends Exception {
         super("Mailbox already exists");
     }
 
-} // End class
+} // Ende class
