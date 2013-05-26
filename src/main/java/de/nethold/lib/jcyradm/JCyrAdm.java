@@ -188,7 +188,7 @@ public class JCyrAdm {
     public final void connect(final Boolean ssl) throws IOException {
         LOGGER.trace(getText("logger.trace.connect"));
         if (ssl) {
-        	LOGGER.trace("Verschlüsselte Verbindung");
+        	LOGGER.trace("öffne Verschlüsselte Verbindung");
             if (isNull(port)) {
                 port = DEFAULT_IMAP_SSL_PORT;
             }
@@ -200,7 +200,7 @@ public class JCyrAdm {
             in = new BufferedReader(new InputStreamReader(
                     sslRequestSocket.getInputStream()));
         } else {
-        	LOGGER.trace("Ungesicherte Verbindung");
+        	LOGGER.trace("öffne Ungesicherte Verbindung");
             if (isNull(port)) {
                 port = DEFAULT_IMAP_PORT;
             }
@@ -214,7 +214,24 @@ public class JCyrAdm {
         welcomeMsg = in.readLine();
         LOGGER.debug("Server >| " + welcomeMsg);
     } // Ende connect()
-    
+
+    /**
+	 * Methode um die Verbindung zum Server zu trennen.
+	 * 
+	 * @throws IOException - wenn der Stream schon geschlossen ist oder
+	 *             Verbindung abgelaufen ist.
+	 */
+    public final void disconnect() throws IOException {
+        LOGGER.trace(getText("logger.trace.disconnect"));
+        if (sslRequestSocket != null) {
+        	LOGGER.trace("schließe Verschlüsselte Verbindung");
+            sslRequestSocket.close();
+        } else {
+        	LOGGER.trace("öffne Ungesicherte Verbindung");
+            requestSocket.close();
+        }
+    } // disconnect()
+
     /**
      * Hilfs-Methode die prüft ob ein Object Null ist.
      *
