@@ -32,6 +32,19 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+	<contributors>
+		<contributor>
+			<name>Kamilla Czastka</name>
+			<email>info@czastka.de</email>
+			<organization>Kamilla Czastka Painting</organization>
+			<organizationUrl>http://www.czastka.de/</organizationUrl>
+			<roles>
+				<role>documentation, graphics</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
+	</contributors>
+
 	<scm>
 		<url>https://github.com/tiv-source/jcyradm/</url>
 		<connection>scm:git:https://github.com/tiv-source/jcyradm.git</connection>
@@ -84,7 +97,7 @@
 		<dependency>
 			<groupId>com.github.stefanbirkner</groupId>
 			<artifactId>system-rules</artifactId>
-			<version>1.2.0</version>
+			<version>1.3.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
