@@ -1,6 +1,7 @@
 package de.nethold.lib.jcyradm;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.math.BigDecimal;
@@ -149,6 +150,28 @@ public class JCyrAdm {
             throw new NoPropertiesFile();
         }
     }// Ende JCyrAdm()
+
+    /**
+     * Konstruktor der Klasse JCyrAdm, es muss eine Properties-Datei angegeben
+     * werden.
+     *
+     * @param properties - Properties-Datei
+     * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
+     *             gefunden wird.
+     */
+    public JCyrAdm(String properties) throws NoPropertiesFile {
+        super();
+        LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
+        props = new Properties();
+        try {
+            LOGGER.debug("Lade Properties Datei.");
+            InputStream inputStream = new FileInputStream(properties);
+            props.load(inputStream);
+            inputStream.close();
+        } catch (Exception e1) {
+            throw new NoPropertiesFile();
+        }
+    }// Ende JCyrAdm(String properties)
 
     
     
