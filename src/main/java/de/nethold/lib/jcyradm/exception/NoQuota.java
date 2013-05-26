@@ -18,7 +18,7 @@ public class NoQuota extends Exception {
      * Konstruktor der Klasse NoQuota.
      */
     public NoQuota() {
-        super("Mailbox not exists");
+        super("No Mailbox Quota set.");
     }
 
 } // Ende class
