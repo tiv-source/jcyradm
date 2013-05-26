@@ -2,7 +2,9 @@ package de.nethold.lib.jcyradm;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.Socket;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.log4j.Logger;
 
@@ -173,6 +176,69 @@ public class JCyrAdm {
         }
     }// Ende JCyrAdm(String properties)
 
+    /**
+     * Methode um eine Verbindung zum Server aufzubauen, es muss der Parameter
+     * "ssl" gesetzt werden. Wenn TRUE übergeben wird dann wird eine
+     * SSL-Verbindung zum angebenen Port aufgebaut.
+     *
+     * @param ssl - Boolean mit dem zwischen SSL und Plain umgeschaltet wird.
+     * @throws IOException - Unbekannter Host oder Unmöglich den Stream zu
+     *             öffnen
+     */
+    public final void connect(final Boolean ssl) throws IOException {
+        LOGGER.trace(getText("logger.trace.connect"));
+        if (ssl) {
+        	LOGGER.trace("Verschlüsselte Verbindung");
+            if (isNull(port)) {
+                port = DEFAULT_IMAP_SSL_PORT;
+            }
+            SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory
+                    .getDefault();
+            sslRequestSocket = (SSLSocket) factory.createSocket(host, port);
+            out = new PrintStream(sslRequestSocket.getOutputStream());
+            out.flush();
+            in = new BufferedReader(new InputStreamReader(
+                    sslRequestSocket.getInputStream()));
+        } else {
+        	LOGGER.trace("Ungesicherte Verbindung");
+            if (isNull(port)) {
+                port = DEFAULT_IMAP_PORT;
+            }
+            requestSocket = new Socket(host, port);
+            out = new PrintStream(requestSocket.getOutputStream());
+            out.flush();
+            in = new BufferedReader(new InputStreamReader(
+                    requestSocket.getInputStream()));
+
+        }
+        welcomeMsg = in.readLine();
+        LOGGER.debug("Server >| " + welcomeMsg);
+    } // Ende connect()
     
+    /**
+     * Hilfs-Methode die prüft ob ein Object Null ist.
+     *
+     * @param isNull - Objekt das getestet werden soll.
+     * @return Boolean - Wahrheitswert: True wenn das Objekt Null ist.
+     */
+    private Boolean isNull(final Object isNull) {
+    	return isNull != null ? false : true;
+    }// Ende isNull()
+
+    /**
+	 * Hilfs-Methode die dazu dient den String einer zu einem bestimmtem
+	 * Schlüssel aus der Eigenschaftsdatei zu holen.
+	 * 
+	 * @param text - Schlüssel unter dem der String abgelegt ist.
+	 * @return String - Der enthaltente String zum angegebenen Schlüssel oder
+	 *         wenn der Schlüssel nicht gefunden wurde der übergebene String.
+	 */
+    private String getText(String text) {
+        if ((props != null) && (props.getProperty(text) != null)) {
+            return props.getProperty(text);
+        }
+        return text;
+    }// Ende getText()
+
     
 }// Ende class
