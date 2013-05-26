@@ -12,9 +12,9 @@ public class MailboxExists extends Exception {
     /**
      * SerialVersionUID der Klasse MailboxExists.
      */
-    private static final long serialVersionUID = -7391872070090203945L;
+	private static final long serialVersionUID = -7391872070090203945L;
 
-    /**
+	/**
      * Konstruktor der Klasse MailboxExists.
      */
     public MailboxExists() {

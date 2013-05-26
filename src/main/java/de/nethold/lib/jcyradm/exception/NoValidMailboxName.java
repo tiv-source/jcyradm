@@ -12,9 +12,9 @@ public class NoValidMailboxName extends Exception {
     /**
      * SerialVersionUID der Klasse NoValidMailboxName.
      */
-    private static final long serialVersionUID = -3773163689804829543L;
+	private static final long serialVersionUID = -3773163689804829543L;
 
-    /**
+	/**
      * Konstruktor der Klasse NoValidMailboxName.
      */
     public NoValidMailboxName() {

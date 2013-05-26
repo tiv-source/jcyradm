@@ -9,10 +9,10 @@ package de.nethold.lib.jcyradm.exception;
  */
 public class NoQuota extends Exception {
 
-    /**
+	/**
      * SerialVersionUID der Klasse NoQuota.
      */
-	private static final long serialVersionUID = -3305938792286503828L;
+	private static final long serialVersionUID = 1781362930378208586L;
 
 	/**
      * Konstruktor der Klasse NoQuota.

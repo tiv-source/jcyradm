@@ -13,9 +13,9 @@ public class UnexpectedExtraArguments extends Exception {
     /**
      * SerialVersionUID der Klasse UnexpectedExtraArguments.
      */
-    private static final long serialVersionUID = 2801608929489543738L;
+	private static final long serialVersionUID = 2801608929489543738L;
 
-    /**
+	/**
      * Konstruktor der Klasse UnexpectedExtraArguments.
      */
     public UnexpectedExtraArguments() {

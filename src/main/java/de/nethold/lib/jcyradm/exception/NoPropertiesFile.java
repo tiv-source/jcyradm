@@ -12,9 +12,9 @@ public class NoPropertiesFile extends Exception {
     /**
      * SerialVersionUID der Klasse NoPropertiesFile.
      */
-    private static final long serialVersionUID = -9132279462449363816L;
+	private static final long serialVersionUID = 7442510912873802852L;
 
-    /**
+	/**
      * Konstruktor der Klasse NoPropertiesFile.
      */
     public NoPropertiesFile() {
