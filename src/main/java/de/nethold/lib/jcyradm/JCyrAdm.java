@@ -20,6 +20,7 @@ import javax.net.ssl.SSLSocketFactory;
 import org.apache.log4j.Logger;
 
 import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
+import de.nethold.lib.jcyradm.exception.MailboxExists;
 import de.nethold.lib.jcyradm.exception.NoMailbox;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
 import de.nethold.lib.jcyradm.exception.NoQuota;
@@ -668,7 +669,63 @@ public class JCyrAdm {
         // // TODO hier mus code hin
     }// Ende setQuota()
 
-    
+    /**
+     * Methode zum erstellen einer Mailbox mit dem Namen "mailbox".
+     *
+     * @param mailbox - String mit dem Namen der Mailbox (i.e.
+     *            "mailboxname" ohne [user.])
+     * @throws IOException - InputStream/OutputStream geschlossen oder nicht
+     *             vorhanden
+     * @throws MailboxExists - Die Mailbox die erstellt werden soll exsistiert
+     *             bereits.
+     * @throws NoServerResponse - //TODO Dokumentation
+     * @throws NoValidMailboxName - //TODO Dokumentation
+     */
+    public final void createMailBox(final String mailbox) throws IOException,
+            MailboxExists, NoServerResponse, NoValidMailboxName {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        System.out.println(mailbox);
+        if (!isValid(mailbox)) {
+
+            LOGGER.warn("Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Kommando absetzen.
+         */
+        sendCommand((new StringBuilder())
+                .append(". create \"")
+                .append("user.")
+                .append(mailbox)
+                .append("\"")
+                .toString());
+
+        /*
+         * Antwortzeile auslesen.
+         */
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+
+        /*
+         * Prüfen ob es eine Serverantwort gibt.
+         */
+        if (isNull(line)) {
+            LOGGER.warn("Keine Antwort vom Server.");
+            throw new NoServerResponse();
+        }
+
+        /*
+         * Wirft Exception wenn es die Mailbox bereits gibt.
+         */
+        if (line.startsWith(". NO Mailbox already exists")) {
+            LOGGER.warn("Die Mailbox existiert schon.");
+            throw new MailboxExists();
+        }
+    }// Ende createMailBox()
+
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
