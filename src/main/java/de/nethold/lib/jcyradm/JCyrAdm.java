@@ -628,8 +628,47 @@ public class JCyrAdm {
             // TODO hier mus noch eine Exception hin
         }
 
-    } // quota(String mailbox)
+    }// Ende quota(String mailbox)
 
+    /**
+     * Methode zum setzten der Quota einer Mailbox.
+     *
+     * @param mailbox - Hier. // TODO Doku hier
+     * @param quotaToSet - Hier. // TODO Doku hier
+     * @throws IOException - TODO doku
+     * @throws NoValidMailboxName -
+     */
+    public final void setQuota(final String mailbox,
+            final BigDecimal quotaToSet)
+            throws IOException, NoValidMailboxName {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.warn("Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Sende Kommando.
+         */
+        sendCommand((new StringBuilder())
+                .append(". setquota \"")
+                .append("user.")
+                .append(mailbox)
+                .append("\" (STORAGE ")
+                .append(quotaToSet)
+                .append(")").toString());
+
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+        //System.out.println("Server >| " + line);
+
+        // ". setquota \"$mb_name\" (STORAGE $quota)"
+        // // TODO hier mus code hin
+    }// Ende setQuota()
+
+    
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
@@ -639,7 +678,7 @@ public class JCyrAdm {
         out.println(command);
         out.flush();
         LOGGER.debug("Client >| " + command);
-    }
+    }// Ende sendCommand()
     
     /**
      * Hilfs-Methode die prüft ob ein Object Null ist.
