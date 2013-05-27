@@ -419,6 +419,49 @@ public class JCyrAdm {
     }// Ende acl(String)
 
     /**
+     * Mit dieser Methode können für eine bestimmte Mailbox, Rechte für einen
+     * bestimmten Benutzer gesetzt werden.
+     *
+     * @param mailbox - Die Mailbox für die die Rechte gesetzt werden sollen.
+     * @param user - Benutzer für die die Rechte gelten sollen.
+     * @param acl - Rechte die für den Benutzer gelten sollen.
+     * @throws NoValidMailboxName -
+     * @throws NoServerResponse 
+     * @throws UnexpectedServerAnswer 
+     */
+    public final void setAcl(final String mailbox, final String user,
+            final String acl) throws NoValidMailboxName, NoServerResponse, UnexpectedServerAnswer {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.warn("Fehler >| Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Kommando absetzen.
+         */
+        sendCommand(". setacl \"user." + mailbox + "\" \"" + user + "\" " + acl);
+
+        /*
+         * Einlesen der Antwortzeile.
+         */
+        try {
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+            if(!getText("server.answer.ok")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+    }// Ende setAcl(String, String, String)
+
+    /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
 	 * @param command - Kommando das an den Server gesendet werden soll.
