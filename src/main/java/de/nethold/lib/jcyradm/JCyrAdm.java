@@ -799,6 +799,17 @@ public class JCyrAdm {
     }// Ende version()
 
     /**
+     * Mit Hilfe dieser Methode kann man sich die Wilkommensnachricht des Server
+     * abfragen, die nach dem aufruf der Methode connect(Boolean ssl) empfangen
+     * wurde.
+     *
+     * @return String - Willkommensnachricht des Servers.
+     */
+    public final String getWelcomeMsg() {
+        return welcomeMsg;
+    }
+
+    /**
      * Methode zum setzen des Hostnamen oder der IP-Adresse des Servers mit dem
      * eine Verbindung aufgebaut werden soll. Falls der Host nicht gesetzt ist
      * wird localhost als hostname benutzt.
