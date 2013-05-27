@@ -27,6 +27,7 @@ import de.nethold.lib.jcyradm.exception.NoQuota;
 import de.nethold.lib.jcyradm.exception.NoServerResponse;
 import de.nethold.lib.jcyradm.exception.NoServerStream;
 import de.nethold.lib.jcyradm.exception.NoValidMailboxName;
+import de.nethold.lib.jcyradm.exception.QuotaNotInitialized;
 import de.nethold.lib.jcyradm.exception.UnexpectedExtraArguments;
 import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
 
@@ -857,6 +858,22 @@ public class JCyrAdm {
     public Map<String, String> getAcls() {
         return acls;
     }// Ende getAcls;
+
+    /**
+     * Bevor die Methode getUsed() aufgerufen werden kann, muss die Methode
+     * quota(String mailbox) aufgrufen werden. Die Methode getUsed() liefert
+     * dann den benutzen Teil der Quota der Mailbox.
+     *
+     * @return BigDecimal - Benutzer Teil der Quota der Mailbox die mit der
+     *         Methode quota(String mailbox) übergeben wurde.
+     * @throws QuotaNotInitialized - TODO doku
+     */
+    public final BigDecimal getUsed() throws QuotaNotInitialized {
+        if (isNull(used)) {
+            throw new QuotaNotInitialized();
+        }
+        return used;
+    }
 
 
     /**
