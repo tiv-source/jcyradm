@@ -130,7 +130,7 @@ public class JCyrAdm {
     /**
      * Map mit den ACLs der aktuellen Mailbox (User/ACL).
      */
-    private Map<String, String> alcs;
+    private Map<String, String> acls;
 
     /**
      * Map mit den Rückgabewerten des ID Kommandos.
@@ -390,12 +390,12 @@ public class JCyrAdm {
                 throw new UnexpectedServerAnswer();
             }
 
-            alcs = new HashMap<String, String>();
+            acls = new HashMap<String, String>();
             String keys[] = line.split(" ");
             for(int i=0; i < keys.length; i++) {
                 if(i > 2) {
                     if(i % 2 == 1) {
-                        alcs.put(keys[i], keys[i+1]);
+                        acls.put(keys[i], keys[i+1]);
                     }
                 }
             }
@@ -773,7 +773,7 @@ public class JCyrAdm {
      */
     public final void setHost(final String hostname) {
         this.host = hostname;
-    }
+    }// Ende setHost()
 
     /**
      * Methode um die Port-Nummer des Server zu verändern, normalerweise nicht
@@ -784,7 +784,25 @@ public class JCyrAdm {
      */
     public final void setPort(final Integer portNumber) {
         this.port = portNumber;
-    }
+    }// Ende setPort()
+
+    /**
+     * Hier. // TODO Doku hier
+     *
+     * @param set - Hier. // TODO Doku hier
+     */
+    public final void setAdministrator(final String set) {
+        this.administrator = set;
+    }// Ende setAdministrator()
+
+    /**
+     * Hier. // TODO Doku hier
+     *
+     * @param set - Hier. // TODO Doku hier
+     */
+    public final void setPassword(final String set) {
+        this.password = set;
+    }// Ende setPasswort()
 
     /**
      * Liefert die Version des Server mit dem gerade eine Verbindung aufgebaut
@@ -830,8 +848,15 @@ public class JCyrAdm {
      */
     public final String getWelcomeMsg() {
         return welcomeMsg;
-    }
+    }// Ende getWelcomeMsg()
 
+    /**
+     * TODO Doku
+     * @return
+     */
+    public Map<String, String> getAcls() {
+        return acls;
+    }// Ende getAcls;
 
 
     /**
