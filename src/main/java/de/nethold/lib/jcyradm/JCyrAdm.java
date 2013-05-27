@@ -763,6 +763,40 @@ public class JCyrAdm {
         //System.out.println("Server >| " + line);
     }// Ende deleteMailBox()
 
+    /**
+     * Liefert die Version des Server mit dem gerade eine Verbindung aufgebaut
+     * ist.
+     *
+     * @return String - Cyrus Version
+     * @throws IOException - InputStream/OutputStream geschlossen oder nicht
+     *             vorhanden
+     */
+    public final String version() throws IOException {
+    	sendCommand(". id NIL");
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+
+        if (isNull(line)) {
+            // TODO Hier kommt noch Exception
+            LOGGER.warn("Keine Server Antwort.");
+        }
+
+        int start = line.indexOf("(");
+        int end = line.lastIndexOf(")");
+
+        String[] storage = line.substring(start + 1, end).split("\" \"");
+
+        for (int i = 0; i < storage.length; i++) {
+            idMap.put(storage[i], storage[i + 1]);
+            i++;
+        }
+
+        line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+        //System.out.println("Server >| " + line);
+
+        return idMap.get("version").split(" ")[0];
+    }// Ende version()
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
