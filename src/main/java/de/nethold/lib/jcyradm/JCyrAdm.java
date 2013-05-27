@@ -12,13 +12,17 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.log4j.Logger;
 
+import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
+import de.nethold.lib.jcyradm.exception.NoServerResponse;
+import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
  * JCyrAdm ist eine Libary die dazu dient eine Verbindung mit einem 
@@ -232,6 +236,76 @@ public class JCyrAdm {
         }
     } // disconnect()
 
+    /**
+     * Unfertige Methode !!!! Diese Methode muss dringent überarbeitet werden.
+     * Holt die Capability und setzt die Default-ACLs. .
+     *
+     * @throws IOException - InputStream/OutputStream geschlossen oder nicht
+     *             vorhanden
+     */
+    public final void capability() throws IOException {
+        LOGGER.trace("capability() aufgerufen.");
+        sendCommand(". capability");
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+        //System.out.println("Server >| " + line);
+        line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+        //System.out.println("Server >| " + line);
+
+        // // TODO Hier mus noch die Acl Abfrage hin ist jetzt von Hand gesetzt
+        allacl = "lrswipkxtecda";
+    }
+
+    /**
+     * Mit dieser Methode wird der Administrationsbenutzer am Server
+     * angemeldet.
+     *
+     * @throws NoServerResponse - Keine Antwort vom Server erhalten.
+     * @throws UnexpectedServerAnswer - Unerwartete Antwort vom Server.
+     * @throws AuthenticationFailure 
+     */
+    public final void login() throws NoServerResponse, UnexpectedServerAnswer, AuthenticationFailure {
+        LOGGER.trace("login() aufgerufen.");
+        sendCommand(". login \"" + administrator + "\" \"" + password + "\"");
+        try {
+            // Lese Antwort vom Server
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+
+            // Wenn User oder Passwort falsch
+            if(getText("server.answer.login.failed")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new AuthenticationFailure();
+            }
+            // Wenn Benutzer erfolgreich angemeldet wurde
+            else if(Pattern.matches(getText("server.answer.login"), line)) {
+                LOGGER.info("Authen >| " + line);
+            }
+            // In allen anderen Fällen
+            else {
+                System.out.println(getText("server.answer.login"));
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+
+        } catch (IOException e) {
+            throw new NoServerResponse();
+        }
+    }// Ende login()
+
+    /**
+	 * Hilfs-Methode um ein Kommando an den Server zu senden.
+	 * 
+	 * @param command - Kommando das an den Server gesendet werden soll.
+	 */
+    private void sendCommand(final String command) {
+        out.println(command);
+        out.flush();
+        LOGGER.debug("Client >| " + command);
+    }
+    
     /**
      * Hilfs-Methode die prüft ob ein Object Null ist.
      *
