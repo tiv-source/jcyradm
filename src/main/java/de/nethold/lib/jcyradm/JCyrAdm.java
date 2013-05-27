@@ -435,7 +435,7 @@ public class JCyrAdm {
          * Prüfen ob der übergebene Mailboxname gültig ist.
          */
         if (!isValid(mailbox)) {
-            LOGGER.warn("Fehler >| Ungültiger Mailboxname");
+            LOGGER.error("Fehler >| Ungültiger Mailboxname");
             throw new NoValidMailboxName();
         }
 
@@ -460,6 +460,50 @@ public class JCyrAdm {
             throw new NoServerResponse();
         }
     }// Ende setAcl(String, String, String)
+
+
+    /**
+     * Mit dieser Methode können die Rechte einer Mailbox die für einen
+     * bestimmten Benutzer existieren gelöscht werden.
+     *
+     * @param mailbox - Mailbox für die die Rechte gelöscht werden sollen.
+     * @param user - Benutzer für den die Rechte gelöscht werden sollen.
+     * @throws NoValidMailboxName - // TODO Dokumentation.
+     * @throws NoServerResponse 
+     * @throws UnexpectedServerAnswer 
+     */
+    public final void deleteAcl(final String mailbox, final String user)
+            throws NoValidMailboxName, NoServerResponse, UnexpectedServerAnswer {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.error("Fehler >| Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Kommando absetzen.
+         */
+        sendCommand(". deleteacl \"user." + mailbox + "\" \"" + user + "\"");
+
+        /*
+         * Antwortzeile auswerten.
+         */
+        try {
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+            if(!getText("server.answer.ok")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+
+    }// Ende deleteAcl(String, String)
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
