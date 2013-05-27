@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
 import de.nethold.lib.jcyradm.exception.NoServerResponse;
+import de.nethold.lib.jcyradm.exception.NoServerStream;
 import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
@@ -295,6 +296,60 @@ public class JCyrAdm {
         }
     }// Ende login()
 
+    /**
+     * Mit dieser Methode meldet man sich vom Server ab, es werden auch alle
+     * Streams geschlossen.
+     *
+     * @throws NoServerResponse - Keine Antwort vom Server.
+     * @throws NoServerStream - Kein Stream vom Server vorhanden.
+     * @throws UnexpectedServerAnswer - Unerwartete Server Antwort erhalten.
+     */
+    public final void logout() throws NoServerResponse, NoServerStream, UnexpectedServerAnswer {
+        LOGGER.trace("logout() aufgerufen.");
+
+        // Sende Logout Nachricht
+        sendCommand(". logout");
+
+        try {
+            // Werte erste Server Antwort aus
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+            if(!getText("server.answer.logout")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+
+        try {
+            // Werte zweite Server Antwort aus
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+            if(!getText("server.answer.ok")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+
+        try {
+            // Schließe InputStream
+            in.close();
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Stream vom Server vorhanden");
+            throw new NoServerStream();
+        }
+        // Schließe OutputStream
+        out.close();
+    }// Ende logout()
+
+    
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
