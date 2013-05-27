@@ -875,6 +875,22 @@ public class JCyrAdm {
         return used;
     }
 
+    /**
+     * Bevor die Methode getQuota() aufgerufen werden kann, muss die Methode
+     * quota(String mailbox) aufgrufen werden. Die Methode getQuota() liefert
+     * dann die aktuelle Quota der Mailbox.
+     *
+     * @return BigDecimal - Quota der Mailbox die mit der Methode quota(String
+     *         mailbox) übergeben wurde.
+     * @throws QuotaNotInitialized - TODO doku
+     */
+    public final BigDecimal getQuota() throws QuotaNotInitialized {
+        if (isNull(used)) {
+            throw new QuotaNotInitialized();
+        }
+        return quota;
+    }
+
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
