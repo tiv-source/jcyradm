@@ -799,6 +799,18 @@ public class JCyrAdm {
     }// Ende version()
 
     /**
+     * Methode zum setzen des Hostnamen oder der IP-Adresse des Servers mit dem
+     * eine Verbindung aufgebaut werden soll. Falls der Host nicht gesetzt ist
+     * wird localhost als hostname benutzt.
+     *
+     * @param hostname - Der Name oder die IP-Adresse des Servers zu dem eine
+     *            Verbindung aufgebaut werden soll.
+     */
+    public final void setHost(final String hostname) {
+        this.host = hostname;
+    }
+
+    /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
 	 * @param command - Kommando das an den Server gesendet werden soll.
