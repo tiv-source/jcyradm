@@ -20,10 +20,13 @@ import javax.net.ssl.SSLSocketFactory;
 import org.apache.log4j.Logger;
 
 import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
+import de.nethold.lib.jcyradm.exception.NoMailbox;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
+import de.nethold.lib.jcyradm.exception.NoQuota;
 import de.nethold.lib.jcyradm.exception.NoServerResponse;
 import de.nethold.lib.jcyradm.exception.NoServerStream;
 import de.nethold.lib.jcyradm.exception.NoValidMailboxName;
+import de.nethold.lib.jcyradm.exception.UnexpectedExtraArguments;
 import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
@@ -504,6 +507,128 @@ public class JCyrAdm {
         }
 
     }// Ende deleteAcl(String, String)
+
+    /**
+     * Methode zum berechnen der Quota der aktuellen Mailbox, die Werte können
+     * über die entsprechenden Methoden abgerufen werden.
+     *
+     * @param mailbox - Mailbox für die die Quota berechnet werden soll.
+     * @throws IOException - InputStream/OutputStream geschlossen oder nicht
+     *             vorhanden
+     * @throws NoMailbox - TODO doku
+     * @throws NoQuota - TODO doku
+     * @throws UnexpectedExtraArguments - TODO doku
+     * @throws NoServerResponse - TODO doku
+     * @throws NoValidMailboxName - TODO doku
+     */
+    public final void quota(final String mailbox) throws IOException,
+            NoMailbox, NoQuota, UnexpectedExtraArguments, NoServerResponse,
+            NoValidMailboxName {
+
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.error("Fehler >| Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Absenden des Befehls und auslesen der ersten Ergebniszeile.
+         */
+        sendCommand(". getquota \"user." + mailbox + "\"");
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+
+        /*
+         * Prüfen ob der Server eine Antwort geschickt hat.
+         */
+        if (isNull(line)) {
+            LOGGER.warn("Kein Antwort vom Server.");
+            throw new NoServerResponse();
+        }
+
+        /*
+         * Wird geworfen wenn es die Mailbox nicht gibt.
+         */
+        if (line.startsWith(". NO Mailbox")) {
+            LOGGER.warn("Mailbox existiert nicht.");
+            throw new NoMailbox();
+        }
+
+        /*
+         * Wird geworfen wenn keine Quota gesetzt worden ist .
+         */
+        if (line.startsWith(". NO Quota root does not exist")) {
+            LOGGER.warn("Es wurde bis jetzt noch keine Quota gesetzt.");
+            throw new NoQuota();
+        }
+
+        /*
+         * Wird geworfen wenn der Methode unbekannte Parameter oder Zeichen
+         * übergeben wurden.
+         */
+        if (line.startsWith(". BAD Unexpected extra arguments to Getquota")) {
+            LOGGER.warn("Es wurden weiter Argumente dem Befehl hinzugefügt.");
+            throw new UnexpectedExtraArguments();
+        }
+
+        /*
+         * Wenn keine Quota exsistiert bzw. die Antwort nicht "* QUOTA enthält
+         * dann wird eine Exception geworfen.
+         */
+        if (!line.startsWith("* QUOTA")) {
+            LOGGER.warn("In der Server-Anwort war keine Quota enthalten.");
+            // TODO Exception hier hin.
+        }
+
+        /*
+         * Setzen der Index Elemente.
+         */
+        int start = line.lastIndexOf("(");
+        int end = line.lastIndexOf(")");
+
+        /*
+         * Zerlegen des Ergebnisses und schreiben der Quota und des
+         * Benutzten Platzes in die Variablen.
+         */
+        String[] storage = line.substring(start + 1, end).split(" ");
+        used = new BigDecimal(storage[1]);
+        quota = new BigDecimal(storage[2]);
+        LOGGER.debug(line.substring(start + 1, end));
+
+
+        /*
+         * Errechnen der Load und befüllung der entsprechenden Variable.
+         */
+        load = used.multiply(new BigDecimal("100")).divide(quota, 2,
+                BigDecimal.ROUND_UP);
+
+        /*
+         * Auslesen der zweiten Antwortzeile
+         */
+        line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+
+        /*
+         * Prüfen ob der Server eine Antwort geschickt hat.
+         */
+        if (isNull(line)) {
+            LOGGER.warn("Kein Antwort vom Server.");
+            throw new NoServerResponse();
+        }
+
+        /*
+         * Exceptions je nach Antwortzeile.
+         */
+        if (!line.startsWith(". OK")) {
+            LOGGER.warn(
+                    "Der letzte Befehl wurde nicht erfolgreich ausgeführt."
+                    );
+            // TODO hier mus noch eine Exception hin
+        }
+
+    } // quota(String mailbox)
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
