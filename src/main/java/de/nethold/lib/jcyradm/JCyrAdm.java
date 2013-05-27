@@ -891,6 +891,21 @@ public class JCyrAdm {
         return quota;
     }
 
+    /**
+     * Bevor die Methode getLoad() aufgerufen werden kann, muss die Methode
+     * quota(String mailbox) aufgrufen werden. Die Methode getLoad() liefert
+     * dann die aktuelle Load der Mailbox.
+     *
+     * @return BigDecimal - Load der Mailbox die mit der Methode quota(String
+     *         mailbox) übergeben wurde.
+     * @throws QuotaNotInitialized - TODO doku
+     */
+    public final BigDecimal getLoad() throws QuotaNotInitialized {
+        if (isNull(used)) {
+            throw new QuotaNotInitialized();
+        }
+        return load;
+    }
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
