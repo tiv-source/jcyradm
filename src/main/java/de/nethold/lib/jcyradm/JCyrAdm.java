@@ -727,6 +727,44 @@ public class JCyrAdm {
     }// Ende createMailBox()
 
     /**
+     * Hier. // TODO Doku hier
+     *
+     * @param mailbox - Hier. // TODO Doku hier
+     * @throws IOException - InputStream/OutputStream geschlossen oder nicht
+     *             vorhanden
+     * @throws NoValidMailboxName -
+     */
+    public final void deleteMailBox(final String mailbox) throws IOException,
+            NoValidMailboxName {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.warn("Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Setzen der Rechte für den Administrationsbenutzer
+         */
+        try {
+            setAcl(mailbox, administrator, allacl);
+        } catch (NoServerResponse e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnexpectedServerAnswer e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        sendCommand(". delete \"user." + mailbox + "\"");
+        String line = in.readLine();
+        LOGGER.debug("Server >| " + line);
+        //System.out.println("Server >| " + line);
+    }// Ende deleteMailBox()
+
+
+    /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
 	 * @param command - Kommando das an den Server gesendet werden soll.
