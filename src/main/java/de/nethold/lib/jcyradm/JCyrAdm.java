@@ -23,6 +23,7 @@ import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
 import de.nethold.lib.jcyradm.exception.NoServerResponse;
 import de.nethold.lib.jcyradm.exception.NoServerStream;
+import de.nethold.lib.jcyradm.exception.NoValidMailboxName;
 import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
@@ -349,7 +350,74 @@ public class JCyrAdm {
         out.close();
     }// Ende logout()
 
-    
+    /**
+     * Mit dieser Methode können die ACLs einer bestimmten Mailbox abgefragt
+     * werden.
+     *
+     * @param mailbox - Die Mailbox für die die ACLs abgefragt werden sollen
+     * @throws NoValidMailboxName - // TODO Dokumentation
+     * @throws NoServerResponse 
+     * @throws UnexpectedServerAnswer 
+     */
+    public final void acl(final String mailbox) throws NoValidMailboxName,
+            NoServerResponse, UnexpectedServerAnswer {
+        /*
+         * Prüfen ob der übergebene Mailboxname gültig ist.
+         */
+        if (!isValid(mailbox)) {
+            LOGGER.error("Fehler >| Ungültiger Mailboxname");
+            throw new NoValidMailboxName();
+        }
+
+        /*
+         * Kommando absetzen.
+         */
+        sendCommand(". getacl \"user." + mailbox + "\"");
+
+        /*
+         * Erste Antwortzeile einlesen.
+         */
+        try {
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+
+            if(!Pattern.matches(getText("server.answer.acl"), line)) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+
+            alcs = new HashMap<String, String>();
+            String keys[] = line.split(" ");
+            for(int i=0; i < keys.length; i++) {
+                if(i > 2) {
+                    if(i % 2 == 1) {
+                        alcs.put(keys[i], keys[i+1]);
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+
+        /*
+         * Zweite Antwortzeile einlesen.
+         */
+        try {
+            String line = in.readLine();
+            LOGGER.debug("Server >| " + line);
+            if(!getText("server.answer.ok")
+                    .contentEquals(new StringBuffer(line))) {
+                LOGGER.error("Fehler >| " + line);
+                throw new UnexpectedServerAnswer();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Fehler >| Keine Antwort von Server erhalten");
+            throw new NoServerResponse();
+        }
+    }// Ende acl(String)
+
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
 	 * 
@@ -370,6 +438,17 @@ public class JCyrAdm {
     private Boolean isNull(final Object isNull) {
     	return isNull != null ? false : true;
     }// Ende isNull()
+
+    /**
+     * Hilfs-Methode die testet ob ein String ein gültiger String im Sinne
+     * einer Cyrus Mailbox ist.
+     *
+     * @param mbString - String der als Mailbox übergeben wurde.
+     * @return Boolean - Wenn gültig dann True.
+     */
+    private Boolean isValid(final String mbString) {
+        return Pattern.matches("[a-zA-Z_]*", mbString)? true : false;
+    }
 
     /**
 	 * Hilfs-Methode die dazu dient den String einer zu einem bestimmtem
