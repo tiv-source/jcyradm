@@ -764,6 +764,29 @@ public class JCyrAdm {
     }// Ende deleteMailBox()
 
     /**
+     * Methode zum setzen des Hostnamen oder der IP-Adresse des Servers mit dem
+     * eine Verbindung aufgebaut werden soll. Falls der Host nicht gesetzt ist
+     * wird localhost als hostname benutzt.
+     *
+     * @param hostname - Der Name oder die IP-Adresse des Servers zu dem eine
+     *            Verbindung aufgebaut werden soll.
+     */
+    public final void setHost(final String hostname) {
+        this.host = hostname;
+    }
+
+    /**
+     * Methode um die Port-Nummer des Server zu verändern, normalerweise nicht
+     * nötig, wenn der Server auf den Standard-Ports betrieben wird.
+     *
+     * @param portNumber - Port-Nummer die für die Verbindung zum Server
+     *            benutzt werden soll.
+     */
+    public final void setPort(final Integer portNumber) {
+        this.port = portNumber;
+    }
+
+    /**
      * Liefert die Version des Server mit dem gerade eine Verbindung aufgebaut
      * ist.
      *
@@ -809,17 +832,7 @@ public class JCyrAdm {
         return welcomeMsg;
     }
 
-    /**
-     * Methode zum setzen des Hostnamen oder der IP-Adresse des Servers mit dem
-     * eine Verbindung aufgebaut werden soll. Falls der Host nicht gesetzt ist
-     * wird localhost als hostname benutzt.
-     *
-     * @param hostname - Der Name oder die IP-Adresse des Servers zu dem eine
-     *            Verbindung aufgebaut werden soll.
-     */
-    public final void setHost(final String hostname) {
-        this.host = hostname;
-    }
+
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
