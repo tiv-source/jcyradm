@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLSocket;
@@ -152,7 +153,7 @@ public class JCyrAdm {
     /**
      * Datei mit den erwarteten Server-Anworten.
      */
-    private Properties serverAnswers;
+    private ResourceBundle serverAnswers;
 
     /**
      * Standard Konstruktor der Klasse JCyrAdm, dabei wird die interne
@@ -166,6 +167,7 @@ public class JCyrAdm {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
+
         try {
             LOGGER.debug("Lade Standard Properties Datei.");
             InputStream inputStream = getClass().getClassLoader()
@@ -175,13 +177,11 @@ public class JCyrAdm {
         } catch (Exception e1) {
             throw new NoPropertiesFile();
         }
+
         try {
             LOGGER.debug("Lade Server Antworten Datei.");
-            InputStream inputStream = getClass().getClassLoader()
-                    .getResourceAsStream(DEFAULT_ANSWER_FILE);
-            serverAnswers.load(inputStream);
-            inputStream.close();
-        } catch (Exception e1) {
+            serverAnswers = ResourceBundle.getBundle("server");
+        } catch (Exception e2) {
             throw new NoServerAnswerFile();
         }
     }// Ende JCyrAdm()
@@ -209,11 +209,8 @@ public class JCyrAdm {
         }
         try {
             LOGGER.debug("Lade Server Antworten Datei.");
-            InputStream inputStream = getClass().getClassLoader()
-                    .getResourceAsStream(DEFAULT_ANSWER_FILE);
-            serverAnswers.load(inputStream);
-            inputStream.close();
-        } catch (Exception e1) {
+            serverAnswers = ResourceBundle.getBundle("server");
+        } catch (Exception e2) {
             throw new NoServerAnswerFile();
         }
     }// Ende JCyrAdm(String properties)
@@ -312,18 +309,18 @@ public class JCyrAdm {
             LOGGER.debug("Server >| " + line);
 
             // Wenn User oder Passwort falsch
-            if(getText("server.answer.login.failed")
+            if(serverAnswers.getString("server.answer.login.failed")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new AuthenticationFailure();
             }
             // Wenn Benutzer erfolgreich angemeldet wurde
-            else if(Pattern.matches(getText("server.answer.login"), line)) {
+            else if(Pattern.matches(serverAnswers.getString("server.answer.login"), line)) {
                 LOGGER.info("Authen >| " + line);
             }
             // In allen anderen Fällen
             else {
-                System.out.println(getText("server.answer.login"));
+                System.out.println(serverAnswers.getString("server.answer.login"));
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
             }
@@ -351,7 +348,7 @@ public class JCyrAdm {
             // Werte erste Server Antwort aus
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
-            if(!getText("server.answer.logout")
+            if(!serverAnswers.getString("server.answer.logout")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
@@ -365,7 +362,7 @@ public class JCyrAdm {
             // Werte zweite Server Antwort aus
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
-            if(!getText("server.answer.ok")
+            if(!serverAnswers.getString("server.answer.ok")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
