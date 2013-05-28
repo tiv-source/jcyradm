@@ -24,6 +24,7 @@ import de.nethold.lib.jcyradm.exception.MailboxExists;
 import de.nethold.lib.jcyradm.exception.NoMailbox;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
 import de.nethold.lib.jcyradm.exception.NoQuota;
+import de.nethold.lib.jcyradm.exception.NoServerAnswerFile;
 import de.nethold.lib.jcyradm.exception.NoServerResponse;
 import de.nethold.lib.jcyradm.exception.NoServerStream;
 import de.nethold.lib.jcyradm.exception.NoValidMailboxName;
@@ -61,6 +62,11 @@ public class JCyrAdm {
      * Die Standard Properties Datei.
      */
     private static final String DEFAULT_PROPERTIES_FILE = "jcyradm.properties";
+
+    /**
+     * Die Standard Antwort Datei.
+     */
+    private static final String DEFAULT_ANSWER_FILE = "server.properties";
 
     /**
      * Cyrus Imap-Host zu dem die Verbindung aufgebaut werden soll.
@@ -144,13 +150,19 @@ public class JCyrAdm {
     private Properties props;
 
     /**
+     * Datei mit den erwarteten Server-Anworten.
+     */
+    private Properties serverAnswers;
+
+    /**
      * Standard Konstruktor der Klasse JCyrAdm, dabei wird die interne
      * Properties-Datei benutzt.
      *
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
+     * @throws NoServerAnswerFile 
      */
-    public JCyrAdm() throws NoPropertiesFile {
+    public JCyrAdm() throws NoPropertiesFile, NoServerAnswerFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
@@ -163,6 +175,15 @@ public class JCyrAdm {
         } catch (Exception e1) {
             throw new NoPropertiesFile();
         }
+        try {
+            LOGGER.debug("Lade Server Antworten Datei.");
+            InputStream inputStream = getClass().getClassLoader()
+                    .getResourceAsStream(DEFAULT_ANSWER_FILE);
+            serverAnswers.load(inputStream);
+            inputStream.close();
+        } catch (Exception e1) {
+            throw new NoServerAnswerFile();
+        }
     }// Ende JCyrAdm()
 
     /**
@@ -172,8 +193,9 @@ public class JCyrAdm {
      * @param properties - Properties-Datei
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
+     * @throws NoServerAnswerFile 
      */
-    public JCyrAdm(String properties) throws NoPropertiesFile {
+    public JCyrAdm(String properties) throws NoPropertiesFile, NoServerAnswerFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
@@ -184,6 +206,15 @@ public class JCyrAdm {
             inputStream.close();
         } catch (Exception e1) {
             throw new NoPropertiesFile();
+        }
+        try {
+            LOGGER.debug("Lade Server Antworten Datei.");
+            InputStream inputStream = getClass().getClassLoader()
+                    .getResourceAsStream(DEFAULT_ANSWER_FILE);
+            serverAnswers.load(inputStream);
+            inputStream.close();
+        } catch (Exception e1) {
+            throw new NoServerAnswerFile();
         }
     }// Ende JCyrAdm(String properties)
 
