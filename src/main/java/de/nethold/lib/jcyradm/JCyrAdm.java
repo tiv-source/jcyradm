@@ -873,7 +873,7 @@ public class JCyrAdm {
             throw new QuotaNotInitialized();
         }
         return used;
-    }
+    }// Ende getUsed()
 
     /**
      * Bevor die Methode getQuota() aufgerufen werden kann, muss die Methode
@@ -889,7 +889,7 @@ public class JCyrAdm {
             throw new QuotaNotInitialized();
         }
         return quota;
-    }
+    }// Ende getQuota()
 
     /**
      * Bevor die Methode getLoad() aufgerufen werden kann, muss die Methode
@@ -905,7 +905,7 @@ public class JCyrAdm {
             throw new QuotaNotInitialized();
         }
         return load;
-    }
+    }// Ende getLoad()
 
     /**
 	 * Hilfs-Methode um ein Kommando an den Server zu senden.
