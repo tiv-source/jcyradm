@@ -65,11 +65,6 @@ public class JCyrAdm {
     private static final String DEFAULT_PROPERTIES_FILE = "jcyradm.properties";
 
     /**
-     * Die Standard Antwort Datei.
-     */
-    private static final String DEFAULT_ANSWER_FILE = "server.properties";
-
-    /**
      * Cyrus Imap-Host zu dem die Verbindung aufgebaut werden soll.
      */
     private String host = "localhost";
