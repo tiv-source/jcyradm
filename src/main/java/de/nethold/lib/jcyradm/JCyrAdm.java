@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
 import de.nethold.lib.jcyradm.exception.MailboxExists;
+import de.nethold.lib.jcyradm.exception.NoLogMessagesFile;
 import de.nethold.lib.jcyradm.exception.NoMailbox;
 import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
 import de.nethold.lib.jcyradm.exception.NoQuota;
@@ -151,14 +152,20 @@ public class JCyrAdm {
     private ResourceBundle serverAnswers;
 
     /**
+     * Datei mit den Log-Nachrichten.
+     */
+    private ResourceBundle logMessages;
+
+    /**
      * Standard Konstruktor der Klasse JCyrAdm, dabei wird die interne
      * Properties-Datei benutzt.
      *
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
      * @throws NoServerAnswerFile 
+     * @throws NoLogMessagesFile 
      */
-    public JCyrAdm() throws NoPropertiesFile, NoServerAnswerFile {
+    public JCyrAdm() throws NoPropertiesFile, NoServerAnswerFile, NoLogMessagesFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
@@ -179,6 +186,14 @@ public class JCyrAdm {
         } catch (Exception e2) {
             throw new NoServerAnswerFile();
         }
+
+        try {
+            LOGGER.debug("Lade Log-Nachrichten Datei.");
+            logMessages = ResourceBundle.getBundle("logging");
+        } catch (Exception e3) {
+            throw new NoLogMessagesFile();
+        }
+
     }// Ende JCyrAdm()
 
     /**
@@ -189,11 +204,13 @@ public class JCyrAdm {
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
      * @throws NoServerAnswerFile 
+     * @throws NoLogMessagesFile 
      */
-    public JCyrAdm(String properties) throws NoPropertiesFile, NoServerAnswerFile {
+    public JCyrAdm(String properties) throws NoPropertiesFile, NoServerAnswerFile, NoLogMessagesFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
+
         try {
             LOGGER.debug("Lade Properties Datei.");
             InputStream inputStream = new FileInputStream(properties);
@@ -202,12 +219,21 @@ public class JCyrAdm {
         } catch (Exception e1) {
             throw new NoPropertiesFile();
         }
+
         try {
             LOGGER.debug("Lade Server Antworten Datei.");
             serverAnswers = ResourceBundle.getBundle("server");
         } catch (Exception e2) {
             throw new NoServerAnswerFile();
         }
+
+        try {
+            LOGGER.debug("Lade Log-Nachrichten Datei.");
+            logMessages = ResourceBundle.getBundle("logging");
+        } catch (Exception e3) {
+            throw new NoLogMessagesFile();
+        }
+
     }// Ende JCyrAdm(String properties)
 
     /**
@@ -220,7 +246,7 @@ public class JCyrAdm {
      *             öffnen
      */
     public final void connect(final Boolean ssl) throws IOException {
-        LOGGER.trace(getText("logger.trace.connect"));
+        LOGGER.debug(logMessages.getString("logger.trace.connect"));
         if (ssl) {
         	LOGGER.trace("öffne Verschlüsselte Verbindung");
             if (isNull(port)) {
@@ -256,7 +282,7 @@ public class JCyrAdm {
 	 *             Verbindung abgelaufen ist.
 	 */
     public final void disconnect() throws IOException {
-        LOGGER.trace(getText("logger.trace.disconnect"));
+        LOGGER.trace(logMessages.getString("logger.trace.disconnect"));
         if (sslRequestSocket != null) {
         	LOGGER.trace("schließe Verschlüsselte Verbindung");
             sslRequestSocket.close();
@@ -409,7 +435,7 @@ public class JCyrAdm {
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
 
-            if(!Pattern.matches(getText("server.answer.acl"), line)) {
+            if(!Pattern.matches(serverAnswers.getString("server.answer.acl"), line)) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
             }
@@ -435,7 +461,7 @@ public class JCyrAdm {
         try {
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
-            if(!getText("server.answer.ok")
+            if(!serverAnswers.getString("server.answer.ok")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
@@ -478,7 +504,7 @@ public class JCyrAdm {
         try {
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
-            if(!getText("server.answer.ok")
+            if(!serverAnswers.getString("server.answer.ok")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
@@ -521,7 +547,7 @@ public class JCyrAdm {
         try {
             String line = in.readLine();
             LOGGER.debug("Server >| " + line);
-            if(!getText("server.answer.ok")
+            if(!serverAnswers.getString("server.answer.ok")
                     .contentEquals(new StringBuffer(line))) {
                 LOGGER.error("Fehler >| " + line);
                 throw new UnexpectedServerAnswer();
@@ -970,6 +996,7 @@ public class JCyrAdm {
 	 * @return String - Der enthaltente String zum angegebenen Schlüssel oder
 	 *         wenn der Schlüssel nicht gefunden wurde der übergebene String.
 	 */
+    @Deprecated
     private String getText(String text) {
         if ((props != null) && (props.getProperty(text) != null)) {
             return props.getProperty(text);
