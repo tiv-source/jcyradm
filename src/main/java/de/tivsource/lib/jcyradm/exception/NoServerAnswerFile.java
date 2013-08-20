@@ -12,9 +12,9 @@ public class NoServerAnswerFile extends Exception {
     /**
      * SerialVersionUID der Klasse NoServerAnswerFile.
      */
-	private static final long serialVersionUID = -8000816274189914156L;
+    private static final long serialVersionUID = -8000816274189914156L;
 
-	/**
+    /**
      * Konstruktor der Klasse NoServerAnswerFile.
      */
     public NoServerAnswerFile() {
