@@ -9,7 +9,7 @@ package de.tivsource.lib.jcyradm.exception;
  */
 public class NoQuota extends Exception {
 
-	/**
+    /**
      * SerialVersionUID der Klasse NoQuota.
      */
     private static final long serialVersionUID = 1781362930378208586L;
