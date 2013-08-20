@@ -12,9 +12,9 @@ public class NoServerResponse extends Exception {
     /**
      * SerialVersionUID der Klasse NoServerResponse.
      */
-	private static final long serialVersionUID = -5297334996803926809L;
+    private static final long serialVersionUID = -5297334996803926809L;
 
-	/**
+    /**
      * Konstruktor der Klasse NoServerResponse.
      */
     public NoServerResponse() {
