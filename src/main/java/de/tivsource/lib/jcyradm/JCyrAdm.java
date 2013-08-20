@@ -162,10 +162,11 @@ public class JCyrAdm {
      *
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
-     * @throws NoServerAnswerFile 
-     * @throws NoLogMessagesFile 
+     * @throws NoServerAnswerFile
+     * @throws NoLogMessagesFile
      */
-    public JCyrAdm() throws NoPropertiesFile, NoServerAnswerFile, NoLogMessagesFile {
+	public JCyrAdm() throws NoPropertiesFile, NoServerAnswerFile,
+			NoLogMessagesFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
@@ -194,7 +195,7 @@ public class JCyrAdm {
             throw new NoLogMessagesFile();
         }
 
-    }// Ende JCyrAdm()
+    } // Ende JCyrAdm()
 
     /**
      * Konstruktor der Klasse JCyrAdm, es muss eine Properties-Datei angegeben
@@ -203,10 +204,11 @@ public class JCyrAdm {
      * @param properties - Properties-Datei
      * @throws NoPropertiesFile - Ausnahme wenn die Properties-Datei nicht
      *             gefunden wird.
-     * @throws NoServerAnswerFile 
-     * @throws NoLogMessagesFile 
+     * @throws NoServerAnswerFile
+     * @throws NoLogMessagesFile
      */
-    public JCyrAdm(String properties) throws NoPropertiesFile, NoServerAnswerFile, NoLogMessagesFile {
+	public JCyrAdm(String properties) throws NoPropertiesFile,
+			NoServerAnswerFile, NoLogMessagesFile {
         super();
         LOGGER.debug("Aktuelle Sprache: " + Locale.getDefault().getLanguage());
         props = new Properties();
