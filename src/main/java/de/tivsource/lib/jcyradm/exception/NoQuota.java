@@ -12,9 +12,9 @@ public class NoQuota extends Exception {
 	/**
      * SerialVersionUID der Klasse NoQuota.
      */
-	private static final long serialVersionUID = 1781362930378208586L;
+    private static final long serialVersionUID = 1781362930378208586L;
 
-	/**
+    /**
      * Konstruktor der Klasse NoQuota.
      */
     public NoQuota() {
