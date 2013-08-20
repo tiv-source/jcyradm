@@ -1,17 +1,18 @@
-package de.nethold.lib.jcyradm.test;
+package de.tivsource.lib.jcyradm.test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import junit.framework.TestCase;
-import de.nethold.lib.jcyradm.JCyrAdm;
-import de.nethold.lib.jcyradm.exception.AuthenticationFailure;
-import de.nethold.lib.jcyradm.exception.NoPropertiesFile;
-import de.nethold.lib.jcyradm.exception.NoServerAnswerFile;
-import de.nethold.lib.jcyradm.exception.NoServerResponse;
-import de.nethold.lib.jcyradm.exception.NoServerStream;
-import de.nethold.lib.jcyradm.exception.UnexpectedServerAnswer;
+import de.tivsource.lib.jcyradm.JCyrAdm;
+import de.tivsource.lib.jcyradm.exception.AuthenticationFailure;
+import de.tivsource.lib.jcyradm.exception.NoLogMessagesFile;
+import de.tivsource.lib.jcyradm.exception.NoPropertiesFile;
+import de.tivsource.lib.jcyradm.exception.NoServerAnswerFile;
+import de.tivsource.lib.jcyradm.exception.NoServerResponse;
+import de.tivsource.lib.jcyradm.exception.NoServerStream;
+import de.tivsource.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
  * In diesem Test werden die Methoden connect() und disconnect() der Klasse
@@ -35,7 +36,7 @@ public class JCyrAdmConnectTest extends TestCase {
         super(testName);
     }
 
-    protected void setUp() throws NoPropertiesFile, NoServerAnswerFile {
+    protected void setUp() throws NoPropertiesFile, NoServerAnswerFile, NoLogMessagesFile {
         
         
         props = new Properties();

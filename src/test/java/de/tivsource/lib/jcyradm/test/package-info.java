@@ -4,4 +4,4 @@
  * @author Marc Michele
  *
  */
-package de.nethold.lib.jcyradm.test;
+package de.tivsource.lib.jcyradm.test;
