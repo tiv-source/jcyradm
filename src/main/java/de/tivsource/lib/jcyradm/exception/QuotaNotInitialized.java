@@ -14,9 +14,9 @@ public class QuotaNotInitialized extends Exception {
     /**
      * SerialVersionUID der Klasse QuotaNotInitialized.
      */
-	private static final long serialVersionUID = 3382327488288130452L;
+    private static final long serialVersionUID = 3382327488288130452L;
 
-	/**
+    /**
      * Konstruktor der Klasse QuotaNotInitialized.
      */
     public QuotaNotInitialized() {
