@@ -35,8 +35,8 @@ import de.tivsource.lib.jcyradm.exception.UnexpectedExtraArguments;
 import de.tivsource.lib.jcyradm.exception.UnexpectedServerAnswer;
 
 /**
- * JCyrAdm ist eine Libary die dazu dient eine Verbindung mit einem 
- * Cyrus-Imap-Server herzustellen und um dann Verwaltungsoperationen 
+ * JCyrAdm ist eine Libary die dazu dient eine Verbindung mit einem
+ * Cyrus-Imap-Server herzustellen und um dann Verwaltungsoperationen
  * auszuführen (createMailbox, removeMailbox, etc. ).
  *
  * @author Marc Michele
@@ -45,9 +45,9 @@ import de.tivsource.lib.jcyradm.exception.UnexpectedServerAnswer;
 public class JCyrAdm {
 
     /**
-	 * Statischer Logger der Klasse JCyrAdm, zur Zeit gibt es Meldungen vom Type
-	 * TRACE und DEBUG.
-	 */
+     * Statischer Logger der Klasse JCyrAdm, zur Zeit gibt es Meldungen vom
+     * Type INFO, TRACE und DEBUG.
+     */
     private static final Logger LOGGER = Logger.getLogger(JCyrAdm.class);
 
     /**
