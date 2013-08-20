@@ -12,9 +12,9 @@ public class UnexpectedServerAnswer extends Exception {
     /**
      * SerialVersionUID der Klasse UnexpectedServerAnswer.
      */
-	private static final long serialVersionUID = 6807122799527025996L;
+    private static final long serialVersionUID = 6807122799527025996L;
 
-	/**
+    /**
      * Konstruktor der Klasse UnexpectedServerAnswer.
      */
     public UnexpectedServerAnswer() {
