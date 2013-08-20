@@ -12,9 +12,9 @@ public class NoServerStream extends Exception {
     /**
      * SerialVersionUID der Klasse NoServerStream.
      */
-	private static final long serialVersionUID = -1062981640943227217L;
+    private static final long serialVersionUID = -1062981640943227217L;
 
-	/**
+    /**
      * Konstruktor der Klasse NoServerStream.
      */
     public NoServerStream() {
